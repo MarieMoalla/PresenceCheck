@@ -1,0 +1,89 @@
+﻿@model IEnumerable<PresenceCheck.Entities.Member>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.firstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.lastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.fbLink)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.phone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.dept)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.nbAbs)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.nbDelay)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.yellowCard)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.redCard)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.firstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.lastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.fbLink)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.phone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.dept)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.nbAbs)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.nbDelay)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.yellowCard)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.redCard)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
