@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PresenceCheck.Data;
 using PresenceCheck.Entities;
+using PresenceCheck.Services;
 
 namespace PresenceCheck.Controllers
 {
@@ -16,10 +17,13 @@ namespace PresenceCheck.Controllers
     {
         #region variables
         private readonly AppDBContext _context;
-
-        public MeetingsController(AppDBContext context)
+        private readonly IPresenceCheck _presence;
+        private readonly ICardCheck _card;
+        public MeetingsController(ICardCheck card,IPresenceCheck presence, AppDBContext context)
         {
             _context = context;
+            _card = card;
+            _presence = presence;
         }
         #endregion
         
@@ -77,14 +81,36 @@ namespace PresenceCheck.Controllers
         }
         #endregion
         
-        #region create meeting
+        #region create meeting per member
         [HttpPost]
         public async Task<ActionResult<Meeting>> PostMeeting(Meeting meeting)
         {
-            _context.Meetings.Add(meeting);
+            Meeting newMeeting = new Meeting()
+            {
+                memberId = meeting.memberId,
+                date = DateTime.Now,
+                title = meeting.title,
+                state = meeting.state
+                
+            };
+            _context.Meetings.Add(newMeeting);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetMeeting", new { id = meeting.id }, meeting);
+            Member member = await _context.Members.FindAsync(meeting.memberId);
+
+            if (meeting.state == Pstate.a)
+            {
+                string result = await _presence.MarkPresence(member, meeting.state);
+                
+                
+            }
+            if (meeting.state == Pstate.r)
+            {
+                string result = await _presence.MarkPresence(member, meeting.state);
+                
+                
+            }
+            return  Ok(newMeeting);
         }
         #endregion
         

@@ -81,9 +81,20 @@ namespace PresenceCheck.Controllers
         [HttpPost]
         public async Task<ActionResult<Member>> PostMember(Member member)
         {
-            _context.Members.Add(member);
-            await _context.SaveChangesAsync();
-
+            _context.Database.OpenConnection();
+            try
+            {
+                await _context.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.Members ON");
+                _context.Members.Add(member);
+                await _context.SaveChangesAsync();
+                _context.SaveChanges();
+                await _context.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.Members OFF");
+            }
+            finally
+            {
+                _context.Database.CloseConnection();
+            }
+            
             return CreatedAtAction("GetMember", new { id = member.id }, member);
         }
         #endregion

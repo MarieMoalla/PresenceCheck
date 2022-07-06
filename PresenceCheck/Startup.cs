@@ -32,6 +32,9 @@ namespace PresenceCheck
             services.AddDbContext<AppDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             #endregion
 
+            services.AddScoped<Services.ICardCheck, Services.CardCheck>();
+            services.AddScoped<Services.IPresenceCheck, Services.PresenceCheck>();
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

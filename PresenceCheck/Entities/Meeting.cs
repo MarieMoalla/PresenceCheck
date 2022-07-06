@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace PresenceCheck.Entities
 {
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum Pstate
     {
         a,
@@ -15,7 +17,7 @@ namespace PresenceCheck.Entities
     {
         public long id { get; set; }
         public string title { get; set; }
-        public string date { get; set; }
+        public DateTime date { get; set; }
         public Pstate state { get; set; }
         // fk
         public Member member { get; set; }
