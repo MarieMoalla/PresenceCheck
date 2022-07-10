@@ -50,9 +50,11 @@ namespace PresenceCheck.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutMember(long id, Member member)
         {
-            if (id != member.id)
+            var m = await _context.Members.FindAsync(id);
+
+            if (m == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
             _context.Entry(member).State = EntityState.Modified;
@@ -107,6 +109,12 @@ namespace PresenceCheck.Controllers
             if (member == null)
             {
                 return NotFound();
+            }
+            IList<Meeting> meetings = await _context.Meetings.Where(m => m.memberId == member.id).ToListAsync();
+            foreach(Meeting meeting in meetings)
+            {
+                _context.Meetings.Remove(meeting);
+                await _context.SaveChangesAsync();
             }
 
             _context.Members.Remove(member);
